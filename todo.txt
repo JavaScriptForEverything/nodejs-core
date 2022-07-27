@@ -1,0 +1,25 @@
+
+var greating = 'Hello'
+
+
+in Browser:
+	console.log( greating ) 								: => Hellow
+	console.log( window.greating ) 					: => Hellow
+
+
+in Terminal (Node):
+
+	console.log( greating ) 								: => Hellow
+	console.log( global.greating ) 					: => undefined
+
+
+Now we can see Node `global` not working 100% same as browser `window` dose.
+
+
+
+----------[ ESLint ]----------
+
+
+
+
+
