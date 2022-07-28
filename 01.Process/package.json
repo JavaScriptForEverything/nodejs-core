@@ -1,0 +1,9 @@
+{
+  "name": "01.Process",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts" : {
+  	"dev" : "NODE_ENV=development node env.js"
+  }
+}
