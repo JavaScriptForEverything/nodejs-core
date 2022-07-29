@@ -1,25 +1,18 @@
 {
   "name": "node-import",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
     "create-ca": "mkdir ssl && cd ssl && mkcert create-ca",
     "create-cert": "cd ssl && mkcert create-cert",
-    "babel-node": "babel-node --presets='@babel/preset-env' --ignore='foo|bar|baz'",
-    "dev": "nodemon --exec yarn babel-node -- index.js"
+    "dev" : "nodemon ."
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "nodemon": "^2.0.19",
-    "socket.io": "^4.5.1"
+    "express": "^4.18.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.18.9",
-    "@babel/core": "^7.18.9",
-    "@babel/node": "^7.18.9",
-    "@babel/preset-env": "^7.18.9",
+    "nodemon": "^2.0.19",
     "mkcert": "^1.5.0"
   }
 }
