@@ -21,11 +21,19 @@ const http = require('http')
 // req.end()
 
 
-// ----------[ Download Image ]----------
+// ----------[ Web Server ]----------
 
-const app = http.createServer((req, res) => {
-	res.writeHeader(200, { 'Content-Type': 'text/html' })
+const server = http.createServer((req, res) => {
+	// res.writeHeader(200, { 'Content-Type' : 'text/html' })
+	// res.end('Hello Server')
 
-	res.end('Hello server')
+	const data = JSON.stringify({ name: 'riajul' }) 	// data must be string or Buffer
+
+	res.writeHeader(200, { 'Content-Type' : 'application/json' })
+	res.end(data)
 })
-app.listen(3000, () => console.log('Server is running on port 3000'))
+
+const PORT = 3000
+server.listen(PORT, () => console.log(`http://localhost:${PORT}`))
+
+
