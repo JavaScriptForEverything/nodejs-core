@@ -3,11 +3,13 @@
 
 ###### Key topics
 
-	. http.request
-	. http.createServer
-	. http-express Server
-	. http-express WebSocket Server
+	. http.request 				: Download file & image
+	. http.createServer 			: Create Server (Everything from scratch)
 
-	. express Server
+	. express Server 			: Create simple and powerful Server
+
+	. http-express Server 			:
+	. http-server with WebSocket 	 	:
+
 
 
