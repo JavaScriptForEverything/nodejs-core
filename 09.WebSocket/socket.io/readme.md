@@ -87,10 +87,13 @@
 
 
 
-in ServerSide: We need 'socket.io' 		package $ yarn add socket.io
-in ClientSide: We need 'socket.io-client' 	package $ yarn add socket.io-client or use CND client
+###### Summary
 
-We can 'socket.io-client' into client.js file many way
+	. in ServerSide: We need 'socket.io' 		: $ yarn add socket.io
+	. in ClientSide: We need 'socket.io-client' 	: $ yarn add socket.io-client 	or 	use CND client
+
+
+###### We can 'socket.io-client' into client.js file many way
 
 	. download socket.io-client.min.js
 

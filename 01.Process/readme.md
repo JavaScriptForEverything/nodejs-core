@@ -1,10 +1,12 @@
-## Understaning Node Process
+# Understaning Node Process
 
-process
-	.env 		: To read environment variable into our code
-	.argv 		: To use node as unix tool, to pass argument to node application from the terminal
-	.exit() 	: To terminate node command
-	.on('events', callback 			: to handle errors
+Process Allow to create cli application:
+
+	process
+		.env 			: To read environment variable into our code
+		.argv 			: To pass argument to node application from the terminal
+		.exit() 		: To terminate node command
+		.on('events', callback) : to handle errors
 
 	.stdin 					:
 		.on('data', (chunk) => {})
