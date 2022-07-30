@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, models } = require('mongoose')
 const { isEmail } = require('validator')
 const { hash } = require('bcryptjs')
 
@@ -56,7 +56,7 @@ userSchema.pre('save', async function() {
 	this.confirmPassword = undefined
 })
 
-module.exports = model('User', userSchema)
+module.exports = models.User || model('User', userSchema)
 
 
 /*

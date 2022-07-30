@@ -1,7 +1,13 @@
-const express = require('express')
-const router = express.Router()
+const { Router } = require('express')
 const reviewController = require('../controllers/reviewController')
 
+/*
+merte params of '/api/products  and 	/api/reviews'
+Because we try to get /api/reviews 	over products like:
+
+	router.use('/:productId/reviews', reviewRouter)  	=> /api/products/productId/reviews
+*/
+const router = Router({ mergeParams: true })
 
 
 /*

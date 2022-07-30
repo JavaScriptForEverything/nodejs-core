@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "slugify": "^1.6.5",
     "validator": "^13.7.0"
   }
 }

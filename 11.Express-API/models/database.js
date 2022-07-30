@@ -1,3 +1,7 @@
-const { connect } = require('mongoose')
+const { connect, connection } = require('mongoose')
 
-module.exports = () => connect(process.env.DB_LOCAL_URL).catch(console.log)
+module.exports = () => {
+	if(connection.readyState >= 1) return
+
+	return connect(process.env.DB_LOCAL_URL).catch(console.log)
+}

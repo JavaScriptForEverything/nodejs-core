@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
+const { Router } = require('express')
 const userController = require('../controllers/userController')
 
+const router = Router()
 
 
 /*

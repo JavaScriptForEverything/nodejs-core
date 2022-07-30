@@ -1,6 +1,8 @@
-const express = require('express')
-const router = express.Router()
+const { Router } = require('express')
 const productController = require('../controllers/productController')
+const reviewRouter = require('./reviewRoute')
+
+const router = Router()
 
 
 
@@ -23,5 +25,7 @@ router.route('/:productId')
 	.delete(productController.removeProduct)
 
 
+// /api/products/productId/reviews
+router.use('/:productId/reviews', reviewRouter)
 
 module.exports = router
