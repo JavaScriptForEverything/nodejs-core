@@ -1,18 +1,22 @@
-exports.getUsers = (req, res) => {
+const User = require('../models/userModel')
+
+exports.getUsers = async (req, res) => {
+	const users = await User.find()
+
 	res.status(200).json({
 		status: 'success',
-		users: [{
-			name: 'riajul'
-		}]
+		count: users.length,
+		users
 	})
 }
 
-exports.addUser = (req, res) => {
+exports.addUser = async (req, res) => {
+	const user = await User.create(req.body)
+	if(!user) return console.log('User.create() failed')
+
 	res.status(201).json({
 		status: 'success',
-		user: {
-			name: 'riajul'
-		}
+		user
 	})
 }
 
