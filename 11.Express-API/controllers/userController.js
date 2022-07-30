@@ -1,4 +1,6 @@
 const User = require('../models/userModel')
+const { appError, catchAsync } = require('../util')
+
 
 exports.getUsers = async (req, res) => {
 	const users = await User.find()
@@ -10,15 +12,15 @@ exports.getUsers = async (req, res) => {
 	})
 }
 
-exports.addUser = async (req, res) => {
+exports.addUser = catchAsync( async (req, res, next) => {
 	const user = await User.create(req.body)
-	if(!user) return console.log('User.create() failed')
+	if(!user) return next(appError('User.create() operation failed'))
 
 	res.status(201).json({
 		status: 'success',
 		user
 	})
-}
+})
 
 exports.getUserById = (req, res) => {
 	res.status(200).json({

@@ -14,3 +14,16 @@ exports.appError = (message='', statusCode=500, status='') => {
 	return error
 }
 
+
+/*
+exports.addUser = catchAsync( async (req, res, next) => {
+	const user = await User.create(req.body)
+
+	if(!user) return next(appError('User.create() operation failed'))
+
+	res.status(201).json({
+		status: 'success',
+		user
+	})
+}) */
+exports.catchAsync = (fn) => (req, res, next) => fn(req,res, next).catch(next)
