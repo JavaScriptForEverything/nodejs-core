@@ -5,6 +5,9 @@
 
 **.log
 
-ssl/
+**/.env
+.env
+
+**/demo.js
 demo.js
 todo.txt
