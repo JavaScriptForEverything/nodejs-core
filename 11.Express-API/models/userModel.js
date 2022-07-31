@@ -41,6 +41,13 @@ const userSchema = new Schema({
 		default: 'user',
 		enum: ['user', 'admin', 'guest']
 	},
+	avatar: { 				// used in Home Page & view product list
+		public_id: String,
+		secure_url: {
+			type: String,
+			default: '/images/users/avatar.jpg'
+		}
+	},
 
 }, {
 	timestamps: true
@@ -78,7 +85,11 @@ module.exports = models.User || model('User', userSchema)
 	"email": "abc@gmail.com",
 	"password" : "asdfasdf",
 	"confirmPassword" : "asdfasdf",
-	"role" : "admin"
+	"role" : "admin",
+	"avatar" : {
+		"public_id" : "alskfaksdjf",
+		"secure_url" : "data:image/jpg;base64,${base64}"
+	}
 }
 
 */

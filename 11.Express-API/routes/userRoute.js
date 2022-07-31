@@ -2,6 +2,8 @@ const { Router } = require('express')
 const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 
+const middlewares = require('../controllers/middlewares')
+
 const router = Router()
 
 
@@ -19,9 +21,9 @@ router.post('/logout', authController.logout)
 router.post('/signup', authController.signup)
 
 router.route('/')
-	// .get(userController.getUsers)
 	.get(authController.protect, userController.getUsers)
-	.post(userController.addUser)
+	.post(middlewares.uploadAvatar, userController.addUser)
+	// .post(middlewares.uploadImage('/images/users'), userController.addUser)
 
 router.route('/:userId')
 	.get(userController.getUserById)

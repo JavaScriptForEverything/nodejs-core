@@ -1,3 +1,6 @@
+const { join } = require('path')
+const fs = require('fs')
+
 const User = require('../models/userModel')
 const { appError, catchAsync } = require('../util')
 
@@ -16,15 +19,30 @@ exports.getUsers = catchAsync( async (req, res, next) => {
 
 
 // POST 	/api/users/
-exports.addUser = catchAsync( async (req, res, next) => {
-	const user = await User.create(req.body)
-	if(!user) return next(appError('User.create() operation failed'))
+exports.addUser = async (req, res, next) => {
 
-	res.status(201).json({
-		status: 'success',
-		user
-	})
-})
+	try {
+		// prevent user to update: 	user.role = 'admin'
+		const body = { ...req.body, role: undefined }
+
+		const user = await User.create(body)
+		if(!user) return next(appError('User.create() operation failed'))
+
+		user.password = undefined 			// hide user password
+
+		res.status(201).json({
+			status: 'success',
+			user,
+		})
+
+	} catch (err) {
+
+		const image = join(__dirname, '..', 'public', req.body.avatar.secure_url)
+
+		const isExists = fs.existsSync(image)
+		if(isExists) fs.unlink(image, () => next(appError(err.message)) )
+	}
+}
 
 
 // GET 	/api/users/:userId
@@ -79,3 +97,9 @@ exports.removeUserById = catchAsync( async (req, res, next) => {
 	// remove cookie
 	res.sendStatus(204)
 })
+
+
+
+
+
+

@@ -2,6 +2,17 @@ const { sign } = require('jsonwebtoken')
 const { serialize } = require('cookie')
 
 
+/* 	const bannerUrl = 'https://raw.githubusercontent.com/robitops10/robitops10/main/BannerForGithub.png'
+		const bannerImage = join(__dirname, '..', 'public', 'images', 'banner.jpg')
+
+		downloadImage(bannerUrl, bannerImage) */
+exports.downloadImage = require('./downloadImage')
+
+
+
+
+
+
 /* Throw Error by this way: 		Which will be handled by global Error Handler.
 		next( appError('Route not found') )
 		next( appError('Route not found', 404) )
@@ -55,3 +66,18 @@ exports.setCookie = (res, token, date=60*60*24*30) => {
 		sameSite: 'none'	 // allow for CORS, to send cookie for this option 'secure' flag must be set
 	}))
 }
+
+
+
+
+/* 	const filename = require('path').join(__dirname, '..', 'public', 'images', 'users', 'avatar.jpg')
+
+		const dataURL = readImageAsDataURL(filename)
+		console.log(dataURL) */
+exports.readImageAsDataURL = (filename) => {
+	const base64 = require('fs').readFileSync(filename, 'base64')
+	const dataURL = `data:image/jpg;base64,${base64}`
+
+	return dataURL
+}
+

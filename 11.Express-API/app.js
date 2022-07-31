@@ -14,7 +14,7 @@ const app = express()
 
 app.use(cors()) 												// make this API publicly available
 app.use(express.static('./public')) 		// set ststic directory to save image and files
-app.use(express.json()) 								// set json data can be received in req.body from client
+app.use(express.json({ limit: '4mb' })) // default limit: 1k: allow send json data from client as req.body
 
 
 //----------[ Routing Section ]----------
