@@ -1,6 +1,6 @@
 const { Schema, model, models } = require('mongoose')
 const { isEmail } = require('validator')
-const { hash } = require('bcryptjs')
+const { hash, compare } = require('bcryptjs')
 
 const userSchema = new Schema({
 	name: {
@@ -25,6 +25,7 @@ const userSchema = new Schema({
 		required: true,
 		maxLength: 50,
 		minLength: 4,
+		select: false 					// hide password on User.find() 	= need: User.find().select('password')
 	},
 	confirmPassword: {
 		type: String,
@@ -55,6 +56,18 @@ userSchema.pre('save', async function() {
 	// remove confirmPassword field before save
 	this.confirmPassword = undefined
 })
+
+
+/* 	user.authenticateUser(req.body.password)
+		const user = User.find({ email: req.body.email })
+		const isAuthenticated = await user.authenticateUser(password) 	// instance of User. not User model */
+userSchema.methods.authenticateUser = async function(password) {
+	return await compare(password, this.password)
+}
+
+
+
+
 
 module.exports = models.User || model('User', userSchema)
 
