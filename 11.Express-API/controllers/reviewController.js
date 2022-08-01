@@ -15,6 +15,21 @@ exports.getReviews = catchAsync( async (req, res, next) => {
 
 
 
+exports.getReviewsByField = (field) => catchAsync( async (req, res, next) => {
+
+	const findByField = {}
+	if(field === 'product') findByField.product = req.params.productId
+	if(field === 'user') findByField.user = req.user.id
+
+	const reviews = await Review.find(findByField)
+
+	res.status(200).json({
+		status: 'success',
+		count: reviews.length,
+		reviews
+	})
+})
+
 
 
 // POST 	/api/reviews 		: this route must be protected
@@ -24,7 +39,7 @@ exports.addReview = catchAsync( async (req, res, next) => {
 	req.body.product 	= req.params.productId 	|| req.body.product
 
 	// // if 	this route is protected, then we will get userId
-	// req.body.user 		= req.user.userId 			|| req.body.user
+	req.body.user 		= req.user.id 			|| req.body.user
 
 
 	const review = await Review.create(req.body)

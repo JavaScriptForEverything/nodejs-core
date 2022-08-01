@@ -47,8 +47,8 @@ exports.catchAsync = (fn) => (req, res, next) => fn(req,res, next).catch(next)
 
 
 // const token = generateToken(user._id)
-exports.generateToken = (_id) => {
-	return sign({ _id }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES })
+exports.generateToken = (id) => {
+	return sign({ id }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES })
 }
 
 // setCookie(res, token)

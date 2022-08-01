@@ -1,16 +1,52 @@
+const { verify } = require('jsonwebtoken')
 const { parse } = require('cookie')
 
 const User = require('../models/userModel')
+const Product = require('../models/productModel')
+
 const { appError, catchAsync, generateToken, setCookie } = require('../util')
 
 
 // .get(authController.protect, userController.getUsers)
-exports.protect = (req, res, next) => {
+exports.protect = catchAsync( async (req, res, next) => {
 	const { token } = parse(req.headers.cookie || '')
 	if(!token) return next(appError('Please login first', 403))
 
+	const { id } = verify(token, process.env.TOKEN_SECRET)
+
+	const user = await User.findById(id)
+	req.user = user
+	req.user.userId = user.id
+
+	next()
+})
+
+
+exports.protectedByAdmin = (req, res, next) => {
+	if(req.user.role !== 'admin') return next(appError(`this route only accessable via admin user`, 403))
+
 	next()
 }
+
+
+/* 	router.use(authController.protect) 						// req.user = user
+		PATCH / DELETE 	/api/products/:productId 			// req.params.productId */
+exports.restrictToUser = async (req, res, next) => {
+	const { userId } = req.user
+
+	const product = await Product.findById(req.params.productId)
+	if(!product) return next(appError('No product found', 404))
+
+	if( product.user.toHexString() !== userId ) {
+		next(appError(`this route is protected by user: ${userId}`, 403))
+	}
+
+	next()
+}
+
+
+
+
 
 
 // POST 	/api/users/login
@@ -26,7 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
 	if(!isAuthenticated) return next(appError('email or password is incorrect', 403))
 
 	// Generate token and setCookie
-	const token = generateToken(user._id)
+	const token = generateToken(user.id)
 	setCookie(res, token)
 
 	res.status(201).json({
@@ -51,11 +87,37 @@ exports.logout = (req, res, next) => {
 	})
 }
 
-// POST 	/api/users/signup 	//
-exports.signup = (req, res, next) => {
-	// const user = await User.create()
-	res.status(201).json({
-		status: 'success',
-		message: 'signup complete, please login first'
-	})
+
+/* router
+		.use(authController.protect) 									// add user in req.user
+		.get( '/me',
+			authController.me, 													// req.params.userId = req.user._id
+			userController.getUserById 									// User.findById(userId)
+		)*/
+exports.me = (req, res, next) => {
+	req.params.userId = req.user.id
+
+	next()
 }
+
+exports.updateMe = (req, res, next) => {
+	req.params.userId = req.user.id
+
+	next()
+}
+
+
+/* router
+		.use(authController.protect) 									// add user in req.user
+		.delete('/delete-me',
+			authController.deleteMe,  									// req.params.userId = req.user._id
+			userController.removeUserById 							// User.findByIdAndDelete(userId,...)
+		) */
+exports.deleteMe = (req, res, next) => {
+	req.params.userId = req.user.id
+
+	next()
+}
+
+
+

@@ -2,7 +2,8 @@ const { join } = require('path')
 const fs = require('fs')
 
 const User = require('../models/userModel')
-const { appError, catchAsync } = require('../util')
+const { appError, catchAsync, setCookie } = require('../util')
+
 
 
 
@@ -32,7 +33,7 @@ exports.addUser = async (req, res, next) => {
 
 		res.status(201).json({
 			status: 'success',
-			user,
+			message: 'signup complete, please login first'
 		})
 
 	} catch (err) {
@@ -61,11 +62,13 @@ exports.getUserById = catchAsync( async (req, res, next) => {
 // PATCH 	/api/users/:userId
 exports.updateUserById = catchAsync( async (req, res, next) => {
 
+	const { role } = req.body
+
 	// filter body
 	const body = {
 		...req.body,
-		password: undefined, 			// only update password by save method, to hash password
-		role: undefined 					// don't allow user to be admin by updating role
+		password: undefined, 												// only update password by save method, to hash password
+		role: role === 'admin' ? role : undefined 	// don't allow user to be admin by updating role
 	}
 
 	const errorMessage = 'Please use "/users/update-my-password" route to update password.'
@@ -94,7 +97,14 @@ exports.removeUserById = catchAsync( async (req, res, next) => {
 	const user = await User.findByIdAndDelete(req.params.userId)
 	if(!user) return next(appError('You are not loged in user', 404))
 
+	const avatar = join(__dirname, '..', 'public', user.avatar.secure_url)
+
+	const isExists = fs.existsSync(avatar)
+	if(isExists) fs.unlink(avatar, (err) => err && console.log(err))
+
 	// remove cookie
+	setCookie(res, '', 0)
+
 	res.sendStatus(204)
 })
 

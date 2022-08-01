@@ -39,6 +39,8 @@ exports.getProduct = catchAsync( async (req, res, next) => {
 	})
 })
 
+
+
 // PATCH 	/api/products/:productId
 exports.updateProduct = catchAsync( async (req, res, next) => {
 	const product = await Product.findByIdAndUpdate(req.params.productId, req.body, {

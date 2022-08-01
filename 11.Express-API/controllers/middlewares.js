@@ -11,7 +11,8 @@ const uploadImage = async (next, dataUrl, saveToDir, size=[400, 200]) => {
 		const base64 = dataUrl.split('base64,').pop()
 		const buffer = Buffer.from(base64, 'base64')
 
-		const file = join(saveToDir, `${uuid()}.jpg`)
+		const uniqueId = uuid()
+		const file = join(saveToDir, `${uniqueId}.jpg`)
 		const secure_url = file.split('public/').pop()
 
 		await sharp(buffer)
@@ -19,7 +20,7 @@ const uploadImage = async (next, dataUrl, saveToDir, size=[400, 200]) => {
 			.toFormat('jpg')
 			.toFile(file)
 
-		return { public_id: uuid(), secure_url }
+		return { public_id: uniqueId, secure_url }
 
 	} catch (err) {
 		next(appError(err.message))

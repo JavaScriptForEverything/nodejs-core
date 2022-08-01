@@ -1,5 +1,7 @@
 const { Router } = require('express')
+
 const reviewController = require('../controllers/reviewController')
+const authController = require('../controllers/authController')
 
 /*
 merte params of '/api/products  and 	/api/reviews'
@@ -19,9 +21,15 @@ router
 	.delete('/:reviewId', reviewController.removeReviewById)
 */
 
+router
+	.get('/my-reviews', authController.protect, reviewController.getReviewsByField('user') )
+	.get('/reviews-on-product', reviewController.getReviewsByField('product'))
+
+
+
 router.route('/')
 	.get(reviewController.getReviews)
-	.post(reviewController.addReview)
+	.post( authController.protect, reviewController.addReview)
 
 router.route('/:reviewId')
 	.get(reviewController.getReviewById)

@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const authController = require('../controllers/authController')
 const productController = require('../controllers/productController')
 const reviewRouter = require('./reviewRoute')
 
@@ -15,17 +16,20 @@ router
 	.delete('/:productId', productController.removeUserById)
 */
 
-router.route('/')
-	.get(productController.getProducts)
-	.post(productController.addProduct)
-
-router.route('/:productId')
-	.get(productController.getProduct)
-	.patch(productController.updateProduct)
-	.delete(productController.removeProduct)
-
+router.get('/', productController.getProducts)
+router.get('/:productId', productController.getProduct)
 
 // /api/products/productId/reviews
 router.use('/:productId/reviews', reviewRouter)
+
+// Bellow routes are are protected to only it's user
+router.use(authController.protect)
+
+router.post('/', productController.addProduct)
+router
+	.patch('/:productId', authController.restrictToUser, productController.updateProduct)
+	.delete('/:productId', authController.restrictToUser, productController.removeProduct)
+
+
 
 module.exports = router

@@ -30,19 +30,50 @@
 ###### Routes
 
 	. /api/users 					[ GET, POST ]
-	. /api/users/:userId 				[ GET, PATCH, DELETE ]
-	. /api/users/signup 				[ POST ]
-	. /api/users/login  				[ POST ]
-	. /api/users/logout  				[ POST ]
+		. /:userId 				[ GET, PATCH, DELETE ]
+		. /signup 				[ POST ]
+		. /login  				[ POST ]
+		. /logout  				[ POST ]
+		. /me  					[ GET  ]
+		. /update-me  				[ PATCH  ]
+		. /delete-me  				[ DELETE ]
+
+
+	. /api/products 				[ GET, POST ]
+		. /:productId 				[ GET, PATCH, DELETE ]
+			. /reviews 			[ GET, POST ]
+			. /reviews-on-product 		[ GET ]
+			. /reviews/:reviewsId 		[ GET, PATCH, DELETE ]
 
 
 	. /api/reviews 					[ GET, POST ]
-	. /api/reviews/:reviewId 			[ GET, PATCH, DELETE ]
-
-	. /api/products 				[ GET, POST ]
-	. /api/products/:productId 			[ GET, PATCH, DELETE ]
-
-	. /api/products/:productId/reviews 		[ GET, POST ]
-	. /api/products/:productId/reviews/:reviewsId 	[ GET, PATCH, DELETE ]
+		. /my-reviews 				[ GET ]
+		. /reviews-on-product 			[ GET ]
+		. /:reviewId 				[ GET, PATCH, DELETE ]
 
 
+
+	Protected Routes:
+		. /api/users/
+			. Create Read Update Delete 	: protected by admin user
+			. me update-me and delete-me 	: protected by user self
+		. /api/users/logout 			: 	" 	"
+
+		. /api/products/
+			. Create Update and Delete 	: protected by user self
+
+		. /api/reviews/
+			. Create Update and Delete 	: protected by user self
+			. get my-reviews 		: 	" 	"
+
+	Unprotected Routes:
+		. /api/users/signup
+		. /api/users/login
+
+		. /api/products
+			.getProducts
+			.getProductById
+
+		. /api/reviews
+			.getReviews
+			.reviews-on-product
