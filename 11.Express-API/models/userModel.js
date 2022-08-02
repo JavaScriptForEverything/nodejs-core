@@ -60,13 +60,6 @@ const userSchema = new Schema({
 })
 
 
-userSchema.post(/^find/, function() {
-	this.password = undefined
-	console.log('hello find')
-
-})
-
-
 // hash password before save
 userSchema.pre('save', async function() {
 	if( !this.isModified('password') ) return 		// if password already have then don't hash again.
