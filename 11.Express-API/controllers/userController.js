@@ -2,7 +2,7 @@ const { join } = require('path')
 const fs = require('fs')
 
 const User = require('../models/userModel')
-const { appError, catchAsync, setCookie } = require('../util')
+const { appError, catchAsync, generateToken, setCookie } = require('../util')
 
 
 
@@ -52,6 +52,8 @@ exports.getUserById = catchAsync( async (req, res, next) => {
 	const user = await User.findById(req.params.userId)
 	if(!user) return next(appError('No user Found', 404))
 
+	user.password = undefined
+
 	res.status(200).json({
 		status: 'success',
 		user
@@ -81,6 +83,7 @@ exports.updateUserById = catchAsync( async (req, res, next) => {
 	})
 
 	if(!user) return next(appError('No user Found', 404))
+	user.password = undefined
 
 	res.status(201).json({
 		status: 'success',
@@ -102,8 +105,8 @@ exports.removeUserById = catchAsync( async (req, res, next) => {
 	const isExists = fs.existsSync(avatar)
 	if(isExists) fs.unlink(avatar, (err) => err && console.log(err))
 
-	// remove cookie
-	setCookie(res, '', 0)
+	generateToken(user.id, 0) 		// Force user to relogin by expire token
+	setCookie(res, '', 0)  				// remove cookie
 
 	res.sendStatus(204)
 })

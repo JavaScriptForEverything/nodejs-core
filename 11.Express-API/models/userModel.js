@@ -25,7 +25,11 @@ const userSchema = new Schema({
 		required: true,
 		maxLength: 50,
 		minLength: 4,
-		select: false 					// hide password on User.find() 	= need: User.find().select('password')
+
+		/* hide password on User.find() 	= need: User.find().select('password')
+		 		if we hide password then we have to do extra request 2 or 3 place, so instead of hiding password
+				we can remove password filed when we send user to client */
+		// select: false
 	},
 	confirmPassword: {
 		type: String,
@@ -34,6 +38,7 @@ const userSchema = new Schema({
 			return confirmPassword === this.password
 		}
 	},
+
 	role: {
 		type: String,
 		lowercase: true,

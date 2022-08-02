@@ -31,10 +31,17 @@ router.route('/')
 	.get(reviewController.getReviews)
 	.post( authController.protect, reviewController.addReview)
 
-router.route('/:reviewId')
+router
+	.route('/:reviewId')
 	.get(reviewController.getReviewById)
 	.patch(reviewController.updateReviewById)
 	.delete(reviewController.removeReviewById)
+
+// router
+// 	.use(authController.protect)
+// 	.get('/:reviewId', authController.restrictToUser('reviews'), reviewController.getReviewById)
+// 	.patch('/:reviewId', authController.restrictToUser('reviews'), reviewController.updateReviewById)
+// 	.delete('/:reviewId', authController.restrictToUser('reviews'), reviewController.removeReviewById)
 
 
 

@@ -47,8 +47,9 @@ exports.catchAsync = (fn) => (req, res, next) => fn(req,res, next).catch(next)
 
 
 // const token = generateToken(user._id)
-exports.generateToken = (id) => {
-	return sign({ id }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES })
+// const token = generateToken(user.id, 0) 			// Force user to relogin by expire token
+exports.generateToken = (id, expiresIn=process.env.TOKEN_EXPIRES) => {
+	return sign({ id }, process.env.TOKEN_SECRET, { expiresIn })
 }
 
 // setCookie(res, token)

@@ -3,6 +3,7 @@ const { parse } = require('cookie')
 
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
+const Review = require('../models/reviewModel')
 
 const { appError, catchAsync, generateToken, setCookie } = require('../util')
 
@@ -43,6 +44,24 @@ exports.restrictToUser = async (req, res, next) => {
 
 	next()
 }
+
+
+
+// exports.restrictToUser = (field) => async (req, res, next) => {
+// 	const { userId } = req.user
+// 	let doc = ''
+
+// 	if(field === 'users') doc = await Review.findById(req.params.reviewId)
+// 	if(field === 'products') doc = await Product.findById(req.params.productId)
+
+// 	if(!doc) return next(appError('No document found', 404))
+
+// 	if( doc.user.toHexString() !== userId ) {
+// 		next(appError(`this route is protected by user: ${userId}`, 403))
+// 	}
+
+// 	next()
+// }
 
 
 
@@ -106,7 +125,6 @@ exports.updateMe = (req, res, next) => {
 	next()
 }
 
-
 /* router
 		.use(authController.protect) 									// add user in req.user
 		.delete('/delete-me',
@@ -121,3 +139,39 @@ exports.deleteMe = (req, res, next) => {
 
 
 
+
+exports.updateMyPassword = catchAsync( async (req, res, next) => {
+	const { password, confirmPassword, currentPassword } = req.body || {}
+
+	const requireFields = ['currentPassword', 'password', 'confirmPassword']
+
+	// check required fields supplied or not
+	requireFields.forEach(field => {
+		if(!req.body[field]) next(appError(`'${field}' field is required`))
+	})
+
+	// check confirmPassword here because we will disable schema validation.
+	if(password !== confirmPassword) return next(appError('confirmPassword is mismatched'))
+	if(password === currentPassword) return next(appError('please use new password to update'))
+
+
+	const user = req.user
+
+	// check is new password or old one
+	const isAuthenticated	= await user.authenticateUser(currentPassword)
+	if(!isAuthenticated) return next(appError('currentPassword is incorrect'))
+
+	user.password = password
+
+	const updatedUser = await user.save({ validateBeforeSave: false })
+	updatedUser.password = undefined
+
+
+	const token = generateToken(user.id, 0) 	// Force user to relogin by expire token
+	setCookie(res, token)
+
+	res.status(201).json({
+		status: 'success',
+		message: 'password is changed please use relogin with new credientials'
+	})
+})

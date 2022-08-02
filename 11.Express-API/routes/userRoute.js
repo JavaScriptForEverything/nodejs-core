@@ -24,6 +24,7 @@ router
 	.use(authController.protect)
 	.get('/me', authController.me, userController.getUserById)
 	.patch('/update-me', authController.updateMe, userController.updateUserById)
+	.patch('/update-my-password', authController.updateMyPassword)
 	.delete('/delete-me', authController.deleteMe, userController.removeUserById)
 
 
