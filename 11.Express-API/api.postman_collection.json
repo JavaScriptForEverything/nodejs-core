@@ -14,13 +14,39 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{dev}}/api/users",
+							"raw": "{{dev}}/api/users?_fields=name,email,role",
 							"host": [
 								"{{dev}}"
 							],
 							"path": [
 								"api",
 								"users"
+							],
+							"query": [
+								{
+									"key": "_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "_limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "_sort",
+									"value": "-price,ratings,price",
+									"disabled": true
+								},
+								{
+									"key": "_fields",
+									"value": "name,email,role"
+								},
+								{
+									"key": "_search",
+									"value": "admin",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -210,7 +236,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"abc@gmail.com\",\n\t\"password\" : \"asdfasdf\"\n}\n\n",
+							"raw": "{\n\t\"email\": \"admin@gmail.com\",\n\t\"password\" : \"asdfasdf\"\n}\n\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -539,6 +565,33 @@
 							"path": [
 								"api",
 								"products"
+							],
+							"query": [
+								{
+									"key": "_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "_limit",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "_sort",
+									"value": "-price,ratings,price",
+									"disabled": true
+								},
+								{
+									"key": "_search",
+									"value": "name 4",
+									"disabled": true
+								},
+								{
+									"key": "_fields",
+									"value": "slug,name,price,ratings,summary",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -687,13 +740,39 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{dev}}/api/reviews",
+							"raw": "{{dev}}/api/reviews?_search=review 3,review",
 							"host": [
 								"{{dev}}"
 							],
 							"path": [
 								"api",
 								"reviews"
+							],
+							"query": [
+								{
+									"key": "_page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "_limit",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "_sort",
+									"value": "user",
+									"disabled": true
+								},
+								{
+									"key": "_search",
+									"value": "review 3,review"
+								},
+								{
+									"key": "_fields",
+									"value": "slug,name,price,ratings,summary",
+									"disabled": true
+								}
 							]
 						}
 					},

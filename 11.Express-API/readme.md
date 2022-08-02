@@ -93,3 +93,42 @@
 			.getReviews
 			.reviews-on-product
 
+
+###### Add apiFeatures: on all 3 routes
+
+	. pagination
+	. search
+	. sort
+	. filter documents by it's properties
+
+
+
+	. /api/products
+		?_page=2&_limit=3&_sort=-price,ratings,price&_search=name 4&_fields=slug,name,price,ratings,summary
+
+			_page=2
+			_limit=3
+			_sort=-createdAt
+			_fields=name,price,rating
+			_search=name 4 			: search on 'name' field (which is default field)
+
+
+	. /api/users
+		?_page=1&_limit=2&_sort=-price,ratings&_fields=name,email,role&_search=admin
+
+			_page=1
+			_limit=2
+			_sort=-price,ratings
+			_fields=name,email,role
+			_search=admin, name 		: search on 'name' field
+
+	. /api/reviews
+		?_page=1&_limit=3&_sort=user&_search=review 3,review&_fields=review,user,product
+
+			_page=1
+			_limit=3
+			_sort=user 			: user === user.id
+			_fields=review,user,product
+			_search=review 3, review 	: search on 'review' field
+
+
