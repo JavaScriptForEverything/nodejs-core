@@ -119,3 +119,48 @@ exports.sendMail = (next) => async ({ from, to, subject, text }) => {
 	}
 
 }
+
+
+
+
+// const products = await apiFeatures( Product.find(), req )
+exports.apiFeatures = (query, req) => {
+	let { _page, _limit, _sort, _fields, _search } = req.query || {}
+
+	// set pagination
+	_page = +_page || 1
+	_limit = +_limit || 3
+	const skip = (_page - 1) * _limit
+
+	// ?_page=2&_limit=3&... 		=> { _page: 1, _limit: 3, ... }
+	if(_page) query = query.skip(skip).limit(_limit)
+
+
+	// ?_sort=-price,ratings,price 	=> '-price ratings price'
+	if(_sort) query = query.sort(_sort.split(',').join(' '))
+
+
+	// ?_fields=slug,name,price,ratings,summary 	=> 'slug name price ratings summary'
+	if(_fields) query = query.select(_fields.split(',').join(' '))
+
+
+	/* 	?_search=product name 4
+	Method-1: Javascript RegExp:
+		if(_search) query = query.find({ name: new RegExp(_search, 'i') })
+
+	Method-2: MongoDB $rexex operator:
+		if(_search) query = query.find({ name: { $regex: _search, $options: 'i' } }) */
+
+
+	// ?_search=product 3 						// just value
+	// ?_search=product 3, 						// value,field 	|| 'name' (default)
+	// ?_search=review 3,review 			// value,field : search on field 'review'
+	const searchValue = _search?.split(',')[0]
+	const searchOnField = _search?.split(',')[1] || 'name'
+
+	const searchObject = _search ? { [searchOnField] : { $regex: searchValue, $options: 'i' } } : {}
+
+	if(_search) query = query.find( searchObject )
+
+	return query
+}

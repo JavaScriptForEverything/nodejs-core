@@ -1,10 +1,10 @@
 const Review = require('../models/reviewModel')
-const { catchAsync, appError } = require('../util')
+const { catchAsync, appError, apiFeatures } = require('../util')
 
 // GET 	/api/reviews 		=> /reoutes/reviewRoute.js
 exports.getReviews = catchAsync( async (req, res, next) => {
 
-	const reviews = await Review.find()
+	const reviews = await apiFeatures( Review.find(), req )
 
 	res.status(200).json({
 		status: 'success',

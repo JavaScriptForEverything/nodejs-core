@@ -1,11 +1,12 @@
 const slugify = require('slugify')
 const Product = require('../models/productModel')
-const { catchAsync, appError, deleteFile } = require('../util')
+const { catchAsync, appError, deleteFile, apiFeatures } = require('../util')
+
 
 
 // GET 	/api/products 			=> 	/routes/productRoute.js
 exports.getProducts = catchAsync( async (req, res, next) => {
-	const products = await Product.find()
+	const products = await apiFeatures( Product.find(), req )
 
 	res.status(200).json({
 		status: 'success',

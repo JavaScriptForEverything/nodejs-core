@@ -2,14 +2,15 @@ const path = require('path')
 const fs = require('fs')
 
 const User = require('../models/userModel')
-const { appError, catchAsync, generateToken, setCookie, deleteFile } = require('../util')
+const { appError, catchAsync, generateToken, setCookie, deleteFile, apiFeatures } = require('../util')
 
 
 
 
 // GET 	/api/users/ 			=>  /routes/userRoute.js
 exports.getUsers = catchAsync( async (req, res, next) => {
-	const users = await User.find().select({ password: false })
+	// const users = await User.find().select({ password: false })
+	const users = await apiFeatures( User.find(), req ).select({ password: false })
 
 	res.status(200).json({
 		status: 'success',
