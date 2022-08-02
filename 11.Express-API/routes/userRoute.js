@@ -17,7 +17,7 @@ router
 */
 
 router.post('/login', authController.login)
-router.post('/signup', middlewares.uploadAvatar, userController.addUser)
+// router.post('/signup', middlewares.uploadAvstar, userController.addUser)
 router.post('/logout', authController.protect, authController.logout)
 
 router.post('/forgot-password', authController.generatePasswordResetToken)
@@ -27,15 +27,18 @@ router.patch('/reset-password', authController.resetPassword)
 router
 	.use(authController.protect)
 	.get('/me', authController.me, userController.getUserById)
-	.patch('/update-me', authController.updateMe, userController.updateUserById)
+	.patch('/update-me',
+		middlewares.imageUploader('avatar', 'users'),
+		authController.updateMe,
+		userController.updateUserById
+	)
 	.patch('/update-my-password', authController.updateMyPassword)
 	.delete('/delete-me', authController.deleteMe, userController.removeUserById)
 
 
 router.route('/')
 	.get(authController.protect, authController.protectedByAdmin, userController.getUsers)
-	.post(middlewares.uploadAvatar, userController.addUser)
-	// .post(middlewares.uploadImage('/images/users'), userController.addUser)
+	.post(middlewares.imageUploader('avatar', 'users'), userController.addUser)
 
 
 router

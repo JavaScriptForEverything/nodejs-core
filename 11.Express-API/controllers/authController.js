@@ -1,6 +1,6 @@
-const { verify, sign } = require('jsonwebtoken')
-const { parse } = require('cookie')
-const { isEmail } = require('validator')
+const jwt = require('jsonwebtoken')
+const cookie = require('cookie')
+const validator = require('validator')
 
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
@@ -11,14 +11,13 @@ const { appError, catchAsync, generateToken, setCookie, sendMail } = require('..
 
 // .get(authController.protect, userController.getUsers)
 exports.protect = catchAsync( async (req, res, next) => {
-	const { token } = parse(req.headers.cookie || '')
+	const { token } = cookie.parse(req.headers.cookie || '')
 	if(!token) return next(appError('Please login first', 403))
 
-	const { id } = verify(token, process.env.TOKEN_SECRET)
+	const { id } = jwt.verify(token, process.env.TOKEN_SECRET)
 
 	const user = await User.findById(id)
 	req.user = user
-	req.user.userId = user.id
 
 	next()
 })
@@ -34,13 +33,11 @@ exports.protectedByAdmin = (req, res, next) => {
 /* 	router.use(authController.protect) 						// req.user = user
 		PATCH / DELETE 	/api/products/:productId 			// req.params.productId */
 exports.restrictToUser = async (req, res, next) => {
-	const { userId } = req.user
-
 	const product = await Product.findById(req.params.productId)
 	if(!product) return next(appError('No product found', 404))
 
-	if( product.user.toHexString() !== userId ) {
-		next(appError(`this route is protected by user: ${userId}`, 403))
+	if( product.user._id.toHexString() !== req.user.id ) {
+		next(appError(`this route is protected by user: ${product._id.toHexString()}`, 403))
 	}
 
 	next()
@@ -190,9 +187,9 @@ exports.generatePasswordResetToken = async (req, res, next) => {
 	const { email } = req.body || {}
 
 	if(!email) return next(appError('email field is required'))
-	if(!isEmail(email)) return next(appError(`invalid email address: ${email}`))
+	if(!validator.isEmail(email)) return next(appError(`invalid email address: ${email}`))
 
-	const resetToken = await sign({ email }, process.env.TOKEN_SECRET, { expiresIn: '20m' })
+	const resetToken = await jwt.sign({ email }, process.env.TOKEN_SECRET, { expiresIn: '20m' })
 
 	await sendMail(next)({
 		from: 'javascriptForEverything@gmail.com',
@@ -223,7 +220,7 @@ exports.resetPassword = catchAsync( async (req, res, next) => {
 	// check confirmPassword here because we will disable schema validation.
 	if(password !== confirmPassword) return next(appError('confirmPassword is mismatched'))
 
-	const { email } = await verify(token, process.env.TOKEN_SECRET)
+	const { email } = await jwt.verify(token, process.env.TOKEN_SECRET)
 	if( !email ) return next(appError('resetToken Error'))
 
 	const user = await User.findOne({ email })

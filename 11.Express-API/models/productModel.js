@@ -134,9 +134,10 @@ const productSchema = new Schema({
 
 
 productSchema.pre('save', function(next) {
+	this.slug = slug(this.name, { lower: true })
+
 	this.price = +this.price
 	this.quantity = +this.quantity
-	this.slug = slug(this.name, { lower: true })
 	next()
 })
 

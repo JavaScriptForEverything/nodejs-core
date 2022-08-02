@@ -1,8 +1,8 @@
-const { join } = require('path')
+const path = require('path')
 const fs = require('fs')
 
 const User = require('../models/userModel')
-const { appError, catchAsync, generateToken, setCookie } = require('../util')
+const { appError, catchAsync, generateToken, setCookie, deleteFile } = require('../util')
 
 
 
@@ -38,7 +38,7 @@ exports.addUser = async (req, res, next) => {
 
 	} catch (err) {
 
-		const image = join(__dirname, '..', 'public', req.body.avatar.secure_url)
+		const image = path.join(__dirname, '..', 'public', req.body.avatar.secure_url)
 
 		const isExists = fs.existsSync(image)
 		if(isExists) fs.unlink(image, () => next(appError(err.message)) )
@@ -61,9 +61,9 @@ exports.getUserById = catchAsync( async (req, res, next) => {
 })
 
 
+
 // PATCH 	/api/users/:userId
 exports.updateUserById = catchAsync( async (req, res, next) => {
-
 	const { role } = req.body
 
 	// filter body
@@ -85,6 +85,9 @@ exports.updateUserById = catchAsync( async (req, res, next) => {
 	if(!user) return next(appError('No user Found', 404))
 	user.password = undefined
 
+	// delete old image after added new one
+	deleteFile(next, req.user.avatar.secure_url)
+
 	res.status(201).json({
 		status: 'success',
 		user
@@ -100,10 +103,8 @@ exports.removeUserById = catchAsync( async (req, res, next) => {
 	const user = await User.findByIdAndDelete(req.params.userId)
 	if(!user) return next(appError('You are not loged in user', 404))
 
-	const avatar = join(__dirname, '..', 'public', user.avatar.secure_url)
-
-	const isExists = fs.existsSync(avatar)
-	if(isExists) fs.unlink(avatar, (err) => err && console.log(err))
+	// delete old image after added new one
+	deleteFile(next, user.avatar.secure_url)
 
 	generateToken(user.id, 0) 		// Force user to relogin by expire token
 	setCookie(res, '', 0)  				// remove cookie

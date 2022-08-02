@@ -1,6 +1,8 @@
-const { sign } = require('jsonwebtoken')
-const { serialize } = require('cookie')
-const { createTransport } = require('nodemailer')
+const fs = require('fs')
+const path = require('path')
+const jwt = require('jsonwebtoken')
+const cookie = require('cookie')
+const nodemailer = require('nodemailer')
 
 
 /* 	const bannerUrl = 'https://raw.githubusercontent.com/robitops10/robitops10/main/BannerForGithub.png'
@@ -9,6 +11,15 @@ const { createTransport } = require('nodemailer')
 		downloadImage(bannerUrl, bannerImage) */
 exports.downloadImage = require('./downloadImage')
 
+
+
+// deleteFile(next, user.avatar.secure_url)
+exports.deleteFile = (next, file) => {
+	const filename = path.join(__dirname, '..', 'public', file)
+	const isExists = fs.existsSync(filename)
+	if(isExists) fs.unlink(filename, (err) => err && next(err))
+
+}
 
 
 
@@ -51,7 +62,7 @@ exports.catchAsync = (fn) => (req, res, next) => fn(req,res, next).catch(next)
 // const token = generateToken(user._id)
 // const token = generateToken(user.id, 0) 			// Force user to relogin by expire token
 exports.generateToken = (id, expiresIn=process.env.TOKEN_EXPIRES) => {
-	return sign({ id }, process.env.TOKEN_SECRET, { expiresIn })
+	return jwt.sign({ id }, process.env.TOKEN_SECRET, { expiresIn })
 }
 
 // setCookie(res, token)
@@ -59,7 +70,7 @@ exports.generateToken = (id, expiresIn=process.env.TOKEN_EXPIRES) => {
 // setCookie(res, token, 0) 						// expires cookie
 exports.setCookie = (res, token, date=60*60*24*30) => {
 
-	res.setHeader('Set-Cookie', serialize('token', token, {
+	res.setHeader('Set-Cookie', cookie.serialize('token', token, {
 		path: '/',
 		maxAge: date,
 		// expires: new Date( Date.now() + 1000*60*60*24*30 ), 	// 1 month future
@@ -98,7 +109,7 @@ const transportOptions = {
 exports.sendMail = (next) => async ({ from, to, subject, text }) => {
 
 	try {
-		const transport = createTransport(transportOptions)
+		const transport = nodemailer.createTransport(transportOptions)
 		const info = await transport.sendMail({ from, to, subject, text })
 
 		// console.log(info)

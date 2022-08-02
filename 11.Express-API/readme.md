@@ -46,6 +46,8 @@
 
 
 	. /api/products 				[ GET, POST ]
+		. /my-products 				[ GET ]
+			. /:productId			[ GET ]
 		. /:productId 				[ GET, PATCH, DELETE ]
 			. /reviews 			[ GET, POST ]
 			. /reviews-on-product 		[ GET ]
@@ -69,6 +71,8 @@
 
 		. /api/products/
 			. Create Update and Delete 	: protected by user self
+			. /my-product 			:  	" 	"
+				. /:productId 		:  	" 	"
 
 		. /api/reviews/
 			. Create Update and Delete 	: protected by user self
