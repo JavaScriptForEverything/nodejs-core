@@ -59,6 +59,14 @@ const userSchema = new Schema({
 	timestamps: true
 })
 
+
+userSchema.post(/^find/, function() {
+	this.password = undefined
+	console.log('hello find')
+
+})
+
+
 // hash password before save
 userSchema.pre('save', async function() {
 	if( !this.isModified('password') ) return 		// if password already have then don't hash again.
@@ -77,6 +85,7 @@ userSchema.pre('save', async function() {
 userSchema.methods.authenticateUser = async function(password) {
 	return await compare(password, this.password)
 }
+
 
 
 
