@@ -25,6 +25,9 @@
 		3:  Now Download 'nofile' because that is not available in array Object.
 
 
+###### Password-Reset By mailing
+	- Like treditional web application, we reset password
+
 
 
 ###### Routes
@@ -36,6 +39,9 @@
 		. /logout  				[ POST ]
 		. /me  					[ GET  ]
 		. /update-me  				[ PATCH  ]
+		. /update-my-password 			[ PATCH  ]
+		. /forgot-password 			[ POST   ]
+		. /reset-password 			[ PATCH  ]
 		. /delete-me  				[ DELETE ]
 
 
@@ -56,8 +62,10 @@
 	Protected Routes:
 		. /api/users/
 			. Create Read Update Delete 	: protected by admin user
-			. me update-me and delete-me 	: protected by user self
-		. /api/users/logout 			: 	" 	"
+			. /me 				: protected by user self
+			. /update-me  			:  	" 	"
+			. /update-my-password 		:  	" 	"
+			. /logout 			: 	" 	"
 
 		. /api/products/
 			. Create Update and Delete 	: protected by user self
@@ -67,8 +75,11 @@
 			. get my-reviews 		: 	" 	"
 
 	Unprotected Routes:
-		. /api/users/signup
-		. /api/users/login
+		. /api/users
+			. /signup
+			. /login
+			. /forgot-password
+			. /reset-password
 
 		. /api/products
 			.getProducts
@@ -77,3 +88,4 @@
 		. /api/reviews
 			.getReviews
 			.reviews-on-product
+

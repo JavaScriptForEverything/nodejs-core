@@ -1,5 +1,6 @@
 const { sign } = require('jsonwebtoken')
 const { serialize } = require('cookie')
+const { createTransport } = require('nodemailer')
 
 
 /* 	const bannerUrl = 'https://raw.githubusercontent.com/robitops10/robitops10/main/BannerForGithub.png'
@@ -17,7 +18,8 @@ exports.downloadImage = require('./downloadImage')
 		next( appError('Route not found') )
 		next( appError('Route not found', 404) )
 		next( appError('Route not found', 404, 'NotFound') ) */
-exports.appError = (message='', statusCode=500, status='') => {
+let appError = ''
+exports.appError = appError = (message='', statusCode=500, status='') => {
 	const error = new Error(message)
 
 	// this way status value not added but why ?
@@ -82,3 +84,27 @@ exports.readImageAsDataURL = (filename) => {
 	return dataURL
 }
 
+
+const transportOptions = {
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "b418aca0749cbe",
+    pass: "5511ee3addb968"
+  }
+}
+
+
+exports.sendMail = (next) => async ({ from, to, subject, text }) => {
+
+	try {
+		const transport = createTransport(transportOptions)
+		const info = await transport.sendMail({ from, to, subject, text })
+
+		// console.log(info)
+
+	} catch (err) {
+		next(appError(err.message))
+	}
+
+}

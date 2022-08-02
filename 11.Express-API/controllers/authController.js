@@ -1,11 +1,12 @@
-const { verify } = require('jsonwebtoken')
+const { verify, sign } = require('jsonwebtoken')
 const { parse } = require('cookie')
+const { isEmail } = require('validator')
 
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
-const Review = require('../models/reviewModel')
+// const Review = require('../models/reviewModel')
 
-const { appError, catchAsync, generateToken, setCookie } = require('../util')
+const { appError, catchAsync, generateToken, setCookie, sendMail } = require('../util')
 
 
 // .get(authController.protect, userController.getUsers)
@@ -140,6 +141,10 @@ exports.deleteMe = (req, res, next) => {
 
 
 
+/*
+router
+	.use(authController.protect)
+	.patch('/update-my-password', authController.updateMyPassword) */
 exports.updateMyPassword = catchAsync( async (req, res, next) => {
 	const { password, confirmPassword, currentPassword } = req.body || {}
 
@@ -155,23 +160,94 @@ exports.updateMyPassword = catchAsync( async (req, res, next) => {
 	if(password === currentPassword) return next(appError('please use new password to update'))
 
 
-	const user = req.user
+	const user = req.user  			// comes from 	.use(authController.protect) middleware
 
 	// check is new password or old one
 	const isAuthenticated	= await user.authenticateUser(currentPassword)
 	if(!isAuthenticated) return next(appError('currentPassword is incorrect'))
 
 	user.password = password
+	user.confirmPassword = undefined 					// very importent: it save password as plain text
 
 	const updatedUser = await user.save({ validateBeforeSave: false })
 	updatedUser.password = undefined
 
 
-	const token = generateToken(user.id, 0) 	// Force user to relogin by expire token
-	setCookie(res, token)
+	// reset token and logout user
+	generateToken(user.id, 0) 	// Force user to relogin by expire token
+	setCookie(res, '', 0) 			// logout current User
 
 	res.status(201).json({
 		status: 'success',
-		message: 'password is changed please use relogin with new credientials'
+		message: 'password is changed please re-login with new credientials'
+	})
+})
+
+
+
+// router.post('/password-reset-token', authController.generatePasswordResetToken)
+exports.generatePasswordResetToken = async (req, res, next) => {
+	const { email } = req.body || {}
+
+	if(!email) return next(appError('email field is required'))
+	if(!isEmail(email)) return next(appError(`invalid email address: ${email}`))
+
+	const resetToken = await sign({ email }, process.env.TOKEN_SECRET, { expiresIn: '20m' })
+
+	await sendMail(next)({
+		from: 'javascriptForEverything@gmail.com',
+		to: email,
+		subject: 'PasswordResetToken',
+		text: resetToken
+	})
+
+	res.status(201).json({
+		status: 'success',
+		message: `token is send to your mail at: '${email}' (token expires in 10 min)`
+	})
+}
+
+
+// this route comes after 'password-reset-token'
+// router.patch('/reset-password', authController.resetPassword)
+exports.resetPassword = catchAsync( async (req, res, next) => {
+	const { password, confirmPassword, token } = req.body || {}
+
+	const requireFields = ['token', 'password', 'confirmPassword']
+
+	// check required fields supplied or not
+	requireFields.forEach(field => {
+		if(!req.body[field]) next(appError(`'${field}' field is required`))
+	})
+
+	// check confirmPassword here because we will disable schema validation.
+	if(password !== confirmPassword) return next(appError('confirmPassword is mismatched'))
+
+	const { email } = await verify(token, process.env.TOKEN_SECRET)
+	if( !email ) return next(appError('resetToken Error'))
+
+	const user = await User.findOne({ email })
+	if( !user ) return next(appError(`No user found by ${email}`))
+
+
+	// // check is new password or old one
+	// const isAuthenticated	= await user.authenticateUser(currentPassword)
+	// if(isAuthenticated) return next(appError('current password is your original password'))
+
+	user.password = password
+	user.confirmPassword = undefined 					// very importent: it save password as plain text
+
+	const updatedUser = await user.save({ validateBeforeSave: false })
+	updatedUser.password = undefined
+
+
+	// reset token and logout user
+	generateToken(user.id, 0) 	// Force user to relogin by expire token
+	setCookie(res, '', 0) 			// logout current User
+
+
+	res.status(201).json({
+		status: 'success',
+		message: 'password is reseted please re-login with new credientials'
 	})
 })

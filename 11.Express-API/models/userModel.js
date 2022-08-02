@@ -31,9 +31,10 @@ const userSchema = new Schema({
 				we can remove password filed when we send user to client */
 		// select: false
 	},
-	confirmPassword: {
+	confirmPassword: { 				// just need to re-validate password is correct that's all
 		type: String,
 		required: true,
+		select: false,
 		validate: function(confirmPassword) {
 			return confirmPassword === this.password
 		}

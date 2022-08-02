@@ -20,6 +20,10 @@ router.post('/login', authController.login)
 router.post('/signup', middlewares.uploadAvatar, userController.addUser)
 router.post('/logout', authController.protect, authController.logout)
 
+router.post('/forgot-password', authController.generatePasswordResetToken)
+router.patch('/reset-password', authController.resetPassword)
+
+
 router
 	.use(authController.protect)
 	.get('/me', authController.me, userController.getUserById)
