@@ -156,7 +156,7 @@ exports.apiFeatures = (query, req) => {
 	// ?_search=product 3, 						// value,field 	|| 'name' (default)
 	// ?_search=review 3,review 			// value,field : search on field 'review'
 	const searchValue = _search?.split(',')[0]
-	const searchOnField = _search?.split(',')[1] || 'name'
+	const searchOnField = _search?.split(',')[1].trim() || 'name'
 
 	const searchObject = _search ? { [searchOnField] : { $regex: searchValue, $options: 'i' } } : {}
 
