@@ -30,7 +30,7 @@ exports.deleteFile = (next, file) => {
 		next( appError('Route not found', 404) )
 		next( appError('Route not found', 404, 'NotFound') ) */
 let appError = ''
-exports.appError = appError = (message='', statusCode=500, status='') => {
+exports.appError = appError = (message='', statusCode=404, status='') => {
 	const error = new Error(message)
 
 	// this way status value not added but why ?

@@ -5,9 +5,31 @@
 
 	. Error handling
 	. Image upload (as dataUrl )
-	. 3 common routes 	/api/users, /api/users/, /api/reviews
+	. Protecting routes 	/api/users, /api/users/, /api/reviews
 	. Cookie based authentication system.
 
+
+###### Error Handling ( '2ND HALF' of the programming )
+
+Error Handling skill is the '2nd half' of the programming, so it is so curtial as the programs works as well.
+
+
+	. NodeJS Errors 	: Built-in, Errors, like: uncaughtException &  unhandledRejection
+	. Express Errors 	: Handle error by passing error into next(..) method. Express handle that
+	. Mongoose Errors 	: Data base throw 4 type of errors, just filter that errors.
+		. CastError 				: InValid ObjectId Error
+		. E11000 				: Duplication Error, against unique property
+		. ValidationError 			: Validation Error, against required property
+
+	. JsonWebTokenError 	: JWT token have 2 type of errors. 1. invalid 	2. expired
+		. JsonWebTokenError 			: InValid Token Error
+		. TokenExpiredError 			: Expire Token Error
+
+	. Other 3rd party package errors, like:
+		. nodemailer Sending mail Failed Error
+		. mongoose Database Connection Error
+		. sharp croping image failed
+		. ... so on
 
 
 ###### Dynamically download all files given as arguments that be placed inside 'images' arrayObject
