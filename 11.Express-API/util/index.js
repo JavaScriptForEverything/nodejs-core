@@ -76,7 +76,7 @@ exports.setCookie = (res, token, date=60*60*24*30) => {
 		// expires: new Date( Date.now() + 1000*60*60*24*30 ), 	// 1 month future
 
 		httpOnly: true,
-		secure: process.env.NODE_ENV === 'production',
+		// secure: process.env.NODE_ENV === 'production',
 		sameSite: 'none'	 // allow for CORS, to send cookie for this option 'secure' flag must be set
 	}))
 }

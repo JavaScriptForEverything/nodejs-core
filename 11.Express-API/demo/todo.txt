@@ -1,0 +1,33 @@
+Download
+	. fake data 						: https://jsonplaceholder.typicode.com/
+	. random avatar 				: https://randomuser.me/photos
+
+	. fake data generator 	: https://json-generator.com/
+
+
+next
+	. seader file
+	. ssh on localhost
+
+
+/*
+
+Greater than and less than symbol in regular expressions ?
+
+*/
+
+
+
+
+
+
+
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: true
+	}
+
+}, {
+	timestamps: true
+})

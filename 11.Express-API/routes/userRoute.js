@@ -17,7 +17,7 @@ router
 */
 
 router.post('/login', authController.login)
-// router.post('/signup', middlewares.uploadAvstar, userController.addUser)
+router.post('/signup', middlewares.imageUploader('avatar', 'users'), userController.addUser)
 router.post('/logout', authController.protect, authController.logout)
 
 router.post('/forgot-password', authController.generatePasswordResetToken)

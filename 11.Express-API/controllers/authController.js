@@ -24,7 +24,7 @@ exports.protect = catchAsync( async (req, res, next) => {
 
 
 exports.protectedByAdmin = (req, res, next) => {
-	if(req.user.role !== 'admin') return next(appError(`this route only accessable via admin user`, 403))
+	if(req.user?.role !== 'admin') return next(appError(`this route only accessable via admin user`, 403))
 
 	next()
 }
