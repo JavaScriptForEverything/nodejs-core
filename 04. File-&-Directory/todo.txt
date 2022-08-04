@@ -1,0 +1,23 @@
+What is Buffer ?
+		- in the example on top we can see user add 'ok' but node console.log() 	as <Buffer >
+
+		So when we read or write data from or to disk or memory, we actually dealing with binary code,
+		that binary code is called 'Buffer'.
+
+		We can't write 'text' file into hard disk or send data over network, for that we must convert that
+		data into binary, and binary is nothing but electronic signal or palse, based on that signal,
+		other end electronics device convert those signal as binary data.
+
+		That Binary data is nothing but 0s and 1s, which is not suitable for human readable so
+		we encode that binary data into multiple format, which make file type.
+
+		like:
+			.txt 			: Text File 	(Human Readable Text)
+			.png ... 	: image viewer encode that file into color code: RGB, CMYK... what show colors => Image
+
+
+		Summary:
+			. Buffer is nothing but binary data, which can be or can not be encoded. for human readability.
+			. if data is encoded then we have to deencoded to binary for process or save into hard disk.
+			. if data is deencoded then we have to encoded to make human readability
+

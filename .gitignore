@@ -1,5 +1,5 @@
 **_*
-**/data/_*
+**/data/*
 **/ssl/*
 **/node_modules/*
 
@@ -8,6 +8,3 @@
 **/.env
 .env
 
-**/demo.js
-demo.js
-todo.txt
