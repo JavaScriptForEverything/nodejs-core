@@ -1,5 +1,5 @@
-// const fs = require('fs')
-const ws = require('ws')
+const join = require('path').join
 
+const result = join('hello', 'world')
 
-console.log(ws)
+console.log(result)

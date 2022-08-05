@@ -1,7 +1,4 @@
 Test:
-	. (req, res, next) 	=> works in catchAsync() function
-	. (req, res) 				=> ?
-
     "cors": "^2.8.5",
     "compression": "^1.7.4",
     "express-rate-limit": "^6.5.1",
