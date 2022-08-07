@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 
 const helmet = require('helmet') 										// Add some secrirty option in response heading
 const rateLimit = require('express-rate-limit') 		// To limit request per hour from a single host.
@@ -31,6 +32,7 @@ app.use(express.json({ limit: '4mb' })) // default limit: 1k: allow send json da
 
 
 //----------[ Routing Section ]----------
+app.use(morgan('dev'))
 
 app.use('/api/users', userRouter)
 app.use('/api/products', productRouter)
