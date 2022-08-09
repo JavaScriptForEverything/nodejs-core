@@ -55,6 +55,7 @@ exports.addProduct = async (req, res, next) => {
 // GET 	/api/products/:productId
 exports.getProductById = catchAsync( async (req, res, next) => {
 	const product = await Product.findById(req.params.productId)
+	// const product = await Product.findById(req.params.productId).populate('reviews') 	// Step-3: virtual field
 	if(!product) return next(appError('No product found', 404))
 
 	res.status(200).json({

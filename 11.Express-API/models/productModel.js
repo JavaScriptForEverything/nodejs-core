@@ -4,18 +4,23 @@ const slug = require('slugify')
 
 /*
 {
+	"user" : "userId",
 	"name" : "product name 1",
 	"category" : "shirt",  				// enum: ['shirt', 'pant']
 	"brand" : "adidas", 					// enum: ['niki', 'adidas', 'ramond', 'oliver', 'zara', 'casely']
 	"size" : "xs", 								//	enum: ['xs', 'sm', 'lg', 'xxl']
 	"price" : 32,
 	"summary" : "aslkdjfaskdjf",
-	"description" : "aslkdjfaskdjf",
-	"user" : "userId"
+	"description" : "aslkdjfaskdjf"
 }
 */
 
 const productSchema = new Schema({
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: true
+	},
 	name: {
 		type: String,
 		required: true,
@@ -122,14 +127,10 @@ const productSchema = new Schema({
 		type: Number,
 		default: 4
 	},
-	user: {
-		type: Schema.Types.ObjectId,
-		ref: 'User',
-		required: true
-	}
 
 }, {
-	timestamps: true
+	timestamps: true,
+	toJSON: { virtuals: true } 			// Step-1: Enable virtual fields on self Schema
 })
 
 
@@ -142,17 +143,21 @@ productSchema.pre('save', function(next) {
 })
 
 
-// // without await, if try to use await it will crush my application
-// productSchema.pre(/^find/, function(next) {
-// 	this.populate({
-// 		path: 'user',
-// 		select: 'username email role',
-// 	})
-// 	next()
-// })
+// Step-2: Generate virtual field: 'reviews' from Review model where Review.product === product._id
+productSchema.virtual('reviews', {
+	ref: 'Review',
+	foreignField: 'product',
+	localField: '_id'
+})
 
 
+// Step-3: GET or visiable reviews fieild 			: globally or on perticular review
+productSchema.pre(/find*/, async function( next ) {
+	// this.populate('reviews')
+	this.populate('reviews', '-createdAt -updatedAt -__v')
 
+	next()
+})
 
 module.exports = models.Product || model('Product', productSchema)
 
