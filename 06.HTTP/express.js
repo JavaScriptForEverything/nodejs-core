@@ -1,4 +1,5 @@
 // ----------[ Express Server ]----------
+const url = require('url')
 const express = require('express')
 
 const app = express()
@@ -19,8 +20,12 @@ app.use(express.json()) 									// allow to parse json data send to server
 
 const catchAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next)
 
-app.get('/api', catchAsync( (req, res) => {
-	return Promise.reject('Hello')
+app.get('/api', catchAsync( async (req, res, next) => {
+	// return Promise.reject('Hello')
+
+	console.log(req.query)
+	const query = new url.URLSearchParams(req.query).toString()
+	console.log(query)
 
 	res.status(200).json({
 		status: 'success',
@@ -28,12 +33,12 @@ app.get('/api', catchAsync( (req, res) => {
 	})
 }))
 
-app.use('*', (err, req, res, next) => {
-	res.status(400).json({
-		status: 'error',
-		message: err.message
-	})
-})
+// app.use('*', (err, req, res, next) => {
+// 	res.status(400).json({
+// 		status: 'error',
+// 		message: err.message
+// 	})
+// })
 
 
 

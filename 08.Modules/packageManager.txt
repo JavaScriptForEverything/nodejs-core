@@ -1,0 +1,166 @@
++-----------------------------------------[ Package Manager ]---------------------------------------+
+|																																																		|
+| Node has 3 package manager: 																																			|
+|																																																		|
+| 	1. npm 				(Old)				: installed with node 																								|
+| 	2. yarn 			(New)				: have to installed seperately (Default over npm) 										|
+| 	3. pnpm 			(Latest)		: have to installed seperately (Not Default yet) 											|
+|																																																		|
+|																																																		|
++---------------------------------------------------------------------------------------------------+
+|																																																		|
+|																																																		|
+|																																																		|
+| $ npm .... 									: Manage 	Node Package  																							|
+| $ npx .... 									: eXecute Node Package  																							|
+|																																																		|
+|																																																		|
+| $ npx create-react-app 	react-app 						: Method-1: For React 															|
+| $ npx create react-app 	react-app 						: Method-2: For NextJS 															|
+|																																																		|
+| $ npx	create-next-app 	my-app 								: Method-1: For NextJS 															|
+| $ yarn create next-app my-app 								: Method-2: For NextJS 															|
+| $ npm	init next-app my-app 										: Method-3: For NextJS 															|
+| $ mkdir my-app & cd my-app 										: Method-4: manually Create Next app 								|
+| 	$ yarn init -y  																																								|
+| 	$ yarn add react react-dom next 							  																								|
+|																																																		|
+| $ npx	create-react-native-app my-app 					: For ReactNative 																	|
+|																																																		|
+|																																																		|
+| npm.com 										: packages details 																										|
+| npmtreands.com 							: compare packages 																										|
+|																																																		|
+|																																																		|
++------------------------------------------[ NPM Packages ]-----------------------------------------+
+|																																																		|
+| NPM (Node Package Manager) 	: The larges package manager in history. 															|
+|																																																		|
+|																																																		|
+| Package: 																																													|
+| 	- Package is nothing but module that some one already built for you. 														|
+|																																																		|
+| Package Management Syttem: 																																				|
+| 	- Softwares that install & update & delete automatically by some command. All the heavy lefing 	|
+| 		happend behind the scane by Package Manager. like: 																						|
+|																																																		|
+| 			Linux OS 	(Debian) 		: $ apt install <package_name> 																				|
+| 			     			(Fedora)		: $ yum install <package_name> 																				|
+|																																																		|
+| 			Node 			(npm)				: $ npm install <package_name> 																				|
+| 			     			(yarn)			: $ yarn add    <package_name> 																				|
+|																																																		|
+| Dependencies: 																																										|
+| 	- When one package depends on other packages, that other packages is called 'dependencies' for 	|
+| 		current package 																																							|
+|																																																		|
+| devDependencies:																																									|
+| 	- dependencies that need for developer to build app, and production server no need it. 					|
+| 	- So when we deploy app in production Server, it only download 'dependencies' not  							|
+| 		'devDependencies' to build app from package.json file. 																				|
+|																																																		|
+|																																																		|
+|																																																		|
+| Versonning: 																																											|
+| 	- Specifing what version of a set of code this is. 																							|
+|																																																		|
+| 	- Code is always updatable, and some update may change a little bit in code, and some update 		|
+| 		change the entire code in new form, and some update don't effect end users way of coding, to 	|
+| 		handle these types of updates versionning comes into play. 																		|
+|																																																		|
+| 	- for more details on version numbers see the [ Version Number ] section. 											|
+|																																																		|
+|																																																		|
+|																																																		|
+| Most of the NPM packages have 2 section:  																												|
+| 	1. Regular Section 				: It will show why and when to use + with example 										|
+| 	2. API Section 						: Here will show every details + available options, but no example. 	|
+|																																																		|
+| 		This Methods are applied on Large Library, like: 																							|
+| 			. @material-ui/core 																																				|
+| 			. mongoose 																																									|
+| 			. electron 																																									|
+|					....																																											|
+|																																																		|
+|																																																		|
+|																																																		|
+|																																																		|
++----------------------------------------------[ Yarn ]---------------------------------------------+
+|																																																		|
+| Yarn: 																																														|
+| 	. Download packages parallel, so 3 time faster than npm. (npm download one after another) 			|
+| 	. Download package and store into cache, so when we need to download again, it download from cache
+| 		in 30 second and no need Internet connection too. 																						|
+|																																																		|
+|																																																		|
+| $ sudo npm install yarn -g 	: Install yarn package manager. 																			|
+|																																																		|
+| $ npx 	create-react-app client --template redux 							: Method-1: By npx 									|
+|																																																		|
+| $ yarn init -y																								:  																	|
+| $ yarn 	create react-app client          											: Method-2: By yarn create  				|
+| $ yarn 	create react-app client --use-npm 										: use npm instead of yarn 					|
+|																																																		|
+|																																																		|
+| $ yarn  init 								: Generate package.json 																							|
+| 				add 		<package>		: install package 																										|
+| 				remove 	<package>		: Remove package 																											|
+| 				install 						: Install all the depentancies from package.json 											|
+|																																																		|
+|																																																		|
+|																																																		|
++----------------------------------------------[ pNPM ]---------------------------------------------+
+|																																																		|
+| Store: 																																														|
+| 	- PNPM package manager store all installed or packages added directly to the store in a single 	|
+| 		place of the Hard Disk, so that instead of copy from local cache or download from internet,		|
+| 		create hard link to project directory from store. This technique has bello benefits: 					|
+|																																																		|
+| 			. Save disk space 											: Every project will not take huse space 						|
+| 			. Fast project create. 																																			|
+| 			. Not used un-related package in 'node_modules' 																						|
+|																																																		|
+|																																																		|
+|																																																		|
+| $ curl -fsSL https://get.pnpm.io/install.sh | sh - 						: Method-1: 												|
+| $ wget -qO- https://get.pnpm.io/install.sh | sh - 						: Method-2: 												|
+| $ npm install -g pnpm 																				: Method-3: 												|
+|																																																		|
+|																																																		|
+| $ which pnpm 																																											|
+| $ pnpm config set store-dir /path/to/.pnpm-store 																									|
+|																																																		|
+| 	- If no store is configured, then pnpm will automatically create a store on the same drive. 		|
+|																																																		|
+| $ pnpm store path 														: Show current store location. 											|
+| $ pnpm store prune 														: Removes orphan packages from the store. 					|
+|																																																		|
+|																																																		|
+|																																																		|
+| $ pnpm init  																	: $ yarn init -y 																		|
+| $ pnpm add <package> 													: $ yarn add <package> 															|
+| $ pnpm remove <package> | $ pnpm rm <package>	: $ yarn remove <package> 													|
+| $ pnpm list           	| $ pnpm ls						: $ yarn list 																			|
+|																																																		|
+| $ pnpm install 																: $ yarn install 																		|
+| $ pnpm start  																: $ yarn start 																			|
+| $ pnpm run dev 	 				| $ pnpm dev 					: $ yarn run dev 						| $ yarn dev 						|
+|																																																		|
+| $ pnpm import npm.lock 												: Migrate from npm to pnpm 													|
+| $ pnpm import yarn.lock 											: 	" 			"  yarn "  	" 													|
+|																																																		|
+|																																																		|
+|----------[ Migrade from yarn to pnpm ]---------- 																									|
+|																																																		|
+| $ cd ~/Document 																																									|
+| $ mkdir backend && cd backend 																																		|
+| $ rsync react-native/server  .	-av --exclude node_module 		: Copy from existing project to current dir
+| $ pnpm import yarn.lock 																																					|
+| $ pnpm install 																																										|
+| $ pnpm dev 																																												|
+|																																																		|
+| Note: React-Native Expo may throw error in some packages after migration. 												|
+|																																																		|
+|																																																		|
+|																																																		|
++---------------------------------------------------------------------------------------------------+

@@ -6,12 +6,29 @@
   "scripts": {
     "babel-node": "babel-node --presets='@babel/preset-env' --ignore='foo|bar|baz'",
     "dev:import": "nodemon --exec yarn babel-node -- index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+
+    "prelint" : "echo ---[ start eslint test ]---",
+    "postlint" : "echo ---[ end eslint test ]---",
+    "lint": "eslint script.js",
+
+    "test" : "ls -l",
+
+    "host" : "echo host: $npm_package_config_host",
+    "port" : "echo port: $npm_package_config_port",
+
+    "origin:host" : "echo host: $npm_package_config_host",
+    "origin:port" : "echo port: $npm_package_config_port"
+  },
+  "config" : {
+  	"host" : "localhost",
+  	"port" : "3000"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/node": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
+    "eslint": "^8.21.0",
     "nodemon": "^2.0.19"
   }
 }
